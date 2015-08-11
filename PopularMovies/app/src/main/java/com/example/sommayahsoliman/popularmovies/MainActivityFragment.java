@@ -37,7 +37,7 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null && !savedInstanceState.containsKey("movies")) {
-            // movieItems = savedInstanceState.getParcelableArrayList("movies");
+             movieItems = savedInstanceState.getParcelableArrayList("movies");
         }
 
     }
@@ -50,7 +50,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-       // outState.putParcelableArrayList("movies", movieItems);
+        outState.putParcelableArrayList("movies", movieItems);
         super.onSaveInstanceState(outState);
     }
 
@@ -82,9 +82,15 @@ public class MainActivityFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "" + position,
+                Toast.makeText(getActivity(), "" + adapter.getItem(position).name,
                         Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                MovieItem movieItem = adapter.getItem(position);
+                detailIntent.putExtra("title", movieItem.name);
+                detailIntent.putExtra("path",movieItem.path);
+                detailIntent.putExtra("release_date",movieItem.releaseDate);
+                detailIntent.putExtra("vote",movieItem.vote);
+                detailIntent.putExtra("overview",movieItem.overView);
                 startActivity(detailIntent);
             }
         });
