@@ -53,19 +53,19 @@
             android:layout_column="14" />
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:inputType = "textMultiLine"
-                android:scrollbars = "vertical"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/textViewOverView"
-                android:layout_row="6"
-                android:layout_column="14"
-                />
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:inputType = "textMultiLine"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:scrollbars = "vertical"
+            android:id="@+id/textViewOverView"
+            android:layout_row="6"
+            android:layout_column="14"
+            />
 
 
 

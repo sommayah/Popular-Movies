@@ -1,7 +1,10 @@
 package com.example.sommayahsoliman.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,7 +70,12 @@ public class MainActivityFragment extends Fragment {
         String sort_by = sharedPref.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_default));
        // Log.v(LOG_TAG,"sort by: "+ sort_by);
-        new FetchMovieTask().execute(sort_by);
+        if(isOnline() == false){
+            Toast.makeText(getActivity(), "no internet connection",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+            new FetchMovieTask().execute(sort_by);
+        }
     }
 
 
@@ -82,15 +90,15 @@ public class MainActivityFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "" + adapter.getItem(position).name,
-                        Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "" + adapter.getItem(position).name,
+               //         Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 MovieItem movieItem = adapter.getItem(position);
                 detailIntent.putExtra("title", movieItem.name);
                 detailIntent.putExtra("path",movieItem.path);
                 detailIntent.putExtra("release_date",movieItem.releaseDate);
                 detailIntent.putExtra("vote",movieItem.vote);
-                detailIntent.putExtra("overview",movieItem.overView);
+                detailIntent.putExtra("overview", movieItem.overView);
                 startActivity(detailIntent);
             }
         });
@@ -101,7 +109,6 @@ public class MainActivityFragment extends Fragment {
     public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieItem>> {
 
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
-
 
 
 
@@ -166,6 +173,7 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected ArrayList<MovieItem> doInBackground(String... params) {
+
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
@@ -263,10 +271,17 @@ public class MainActivityFragment extends Fragment {
         }
 
 
+
+
     }
 
 
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
 
 
 
