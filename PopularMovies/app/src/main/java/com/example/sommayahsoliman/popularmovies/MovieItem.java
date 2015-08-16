@@ -11,9 +11,9 @@ public class MovieItem implements Parcelable{
     public final String path;
     public final String releaseDate;
     public final String overView;
-    public final long vote;
+    public final double vote;
 
-    MovieItem(String name, String path, String releaseDate, long vote, String overView){
+    MovieItem(String name, String path, String releaseDate, double vote, String overView){
         this.name = name;
         this.path = path;
         this.releaseDate = releaseDate;
@@ -26,7 +26,7 @@ public class MovieItem implements Parcelable{
         name = in.readString();
         path = in.readString();
         releaseDate = in.readString();
-        vote = in.readInt();
+        vote = in.readDouble();
         overView=in.readString();
     }
 
@@ -40,7 +40,7 @@ public class MovieItem implements Parcelable{
         dest.writeString(name);
         dest.writeString(path);
         dest.writeString(releaseDate);
-        dest.writeLong(vote);
+        dest.writeDouble(vote);
         dest.writeString(overView);
 
     }

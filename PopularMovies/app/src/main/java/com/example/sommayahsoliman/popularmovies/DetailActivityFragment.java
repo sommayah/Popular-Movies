@@ -31,7 +31,7 @@ public class DetailActivityFragment extends Fragment {
     private String name;
     private String path;
     private String release_date;
-    private long vote;
+    private double vote;
     private String overview;
 
     public DetailActivityFragment() {
@@ -55,7 +55,7 @@ public class DetailActivityFragment extends Fragment {
             name = intent.getStringExtra("title");
             path = intent.getStringExtra("path");
             release_date = intent.getStringExtra("release_date");
-            vote = intent.getLongExtra("vote", 0);
+            vote = intent.getDoubleExtra("vote", 0);
             overview = intent.getStringExtra("overview");
 
             TextView textView = (TextView)rootView.findViewById(R.id.textViewTitle);
@@ -66,7 +66,6 @@ public class DetailActivityFragment extends Fragment {
             voteTextView.setText(VOTE + String.valueOf(vote));
             TextView overviewTextView = (TextView)rootView.findViewById(R.id.textViewOverView);
             overviewTextView.setText(overview);
-           // overviewTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
             ImageView imageView = (ImageView)rootView.findViewById(R.id.imageView);
             if(isOnline() == false){
                 Toast.makeText(getActivity(), "no internet connection",

@@ -144,14 +144,14 @@ public class MainActivityFragment extends Fragment {
                 String movie_title;
                 String movie_path;
                 String movie_overview;
-                long movie_vote;
+                double movie_vote;
                 String movie_date;
                 // Get the JSON object representing the movie title and path
                 JSONObject movie = movieArray.getJSONObject(i);
                 movie_title = movie.getString(MOVIE_TITLE);
                 movie_path = movie.getString(MOVIE_PATH);
                 movie_overview=movie.getString(MOVIE_OVERVIEW);
-                movie_vote = movie.getLong(MOVIE_VOTE);
+                movie_vote = movie.getDouble(MOVIE_VOTE);
                 movie_date = movie.getString(MOVIE_RELEASE_DATE);
                 resultTitles[i] = movie_title;
                 resultPaths[i] = movie_path;
