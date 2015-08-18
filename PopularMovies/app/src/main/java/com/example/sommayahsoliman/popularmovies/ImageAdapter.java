@@ -60,9 +60,9 @@ public class ImageAdapter extends BaseAdapter {
         movie_name = (TextView) movie_view.getTag(R.id.text);
         MovieItem item = getItem(position);
         //movie_picture.setImageResource(item.drawableId);
-        movie_name.setText(item.name);
+        movie_name.setText(item.getName());
         new DownloadImageTask(movie_picture)
-                .execute(BASE_URL + IMAGE_SIZE + item.path);
+                .execute(BASE_URL + IMAGE_SIZE + item.getPath());
         return movie_view;
 
     }

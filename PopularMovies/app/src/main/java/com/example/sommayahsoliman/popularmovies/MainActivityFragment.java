@@ -36,16 +36,46 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
     ArrayList<MovieItem> movieItems;
     ImageAdapter adapter;
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null && !savedInstanceState.containsKey("movies")) {
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+         listener= new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                updateMovies();
+            }
+        };
+
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey("movies")) {
              movieItems = savedInstanceState.getParcelableArrayList("movies");
+        }else{
+            movieItems = new ArrayList<MovieItem>();
+            updateMovies();
         }
+        //to listen to setting changes and fetch new data when changed
+
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //updateMovies();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+    }
 
     public MainActivityFragment() {
         setHasOptionsMenu(true);
@@ -57,11 +87,7 @@ public class MainActivityFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateMovies();
-    }
+
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     void updateMovies(){
 
@@ -75,8 +101,11 @@ public class MainActivityFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
         }else {
             new FetchMovieTask().execute(sort_by);
+
         }
     }
+
+
 
 
     @Override
@@ -85,23 +114,27 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridview = (GridView) rootView.findViewById(R.id.gridView_movies);
         adapter = new ImageAdapter(getActivity());
+        if(movieItems !=null){
+            adapter.add(movieItems);
+        }
         gridview.setAdapter(adapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-               // Toast.makeText(getActivity(), "" + adapter.getItem(position).name,
-               //         Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "" + adapter.getItem(position).name,
+                //         Toast.LENGTH_SHORT).show();
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 MovieItem movieItem = adapter.getItem(position);
-                detailIntent.putExtra("title", movieItem.name);
-                detailIntent.putExtra("path",movieItem.path);
-                detailIntent.putExtra("release_date",movieItem.releaseDate);
-                detailIntent.putExtra("vote",movieItem.vote);
-                detailIntent.putExtra("overview", movieItem.overView);
+                detailIntent.putExtra("title", movieItem.getName());
+                detailIntent.putExtra("path", movieItem.getPath());
+                detailIntent.putExtra("release_date", movieItem.getReleaseDate());
+                detailIntent.putExtra("vote", movieItem.getVote());
+                detailIntent.putExtra("overview", movieItem.getOverView());
                 startActivity(detailIntent);
             }
         });
+
         return rootView;
     }
 

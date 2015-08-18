@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Created by sommayahsoliman on 8/10/15.
  */
 public class MovieItem implements Parcelable{
-    public final String name;
-    public final String path;
-    public final String releaseDate;
-    public final String overView;
-    public final double vote;
+    private final String name;
+    private final String path;
+    private final String releaseDate;
+    private final String overView;
+    private final double vote;
 
     MovieItem(String name, String path, String releaseDate, double vote, String overView){
         this.name = name;
@@ -56,4 +56,20 @@ public class MovieItem implements Parcelable{
         }
 
     };
+
+    public String getName(){
+        return name;
+    }
+    public String getPath(){
+        return path;
+    }
+    public double getVote(){
+        return vote;
+    }
+    public String getOverView(){
+        return overView;
+    }
+    public String getReleaseDate(){
+        return releaseDate;
+    }
 }
