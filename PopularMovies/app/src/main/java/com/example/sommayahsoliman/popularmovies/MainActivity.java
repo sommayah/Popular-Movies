@@ -2,7 +2,6 @@ package com.example.sommayahsoliman.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    void updateUI(){
-        FragmentManager manager = getSupportFragmentManager();
-        MainActivityFragment fragment = (MainActivityFragment)manager.findFragmentById(R.id.fragment);
-        fragment.updateMovies(); //refresh the ui
     }
 
 

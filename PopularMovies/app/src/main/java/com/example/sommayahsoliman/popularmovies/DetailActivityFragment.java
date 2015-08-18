@@ -1,11 +1,8 @@
 package com.example.sommayahsoliman.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,7 +64,7 @@ public class DetailActivityFragment extends Fragment {
             TextView overviewTextView = (TextView)rootView.findViewById(R.id.textViewOverView);
             overviewTextView.setText(overview);
             ImageView imageView = (ImageView)rootView.findViewById(R.id.imageView);
-            if(isOnline() == false){
+            if(OnlineUtils.isOnline(getActivity()) == false){
                 Toast.makeText(getActivity(), "no internet connection",
                         Toast.LENGTH_SHORT).show();
             }else {
@@ -89,16 +86,16 @@ public class DetailActivityFragment extends Fragment {
 
         protected Bitmap doInBackground(String... urls) {
 
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
 
         }
 
@@ -107,11 +104,4 @@ public class DetailActivityFragment extends Fragment {
         }
 
     }
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnected();
-    }
-
 }

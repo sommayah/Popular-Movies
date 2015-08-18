@@ -1,10 +1,7 @@
 package com.example.sommayahsoliman.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,10 +38,11 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-         listener= new SharedPreferences.OnSharedPreferenceChangeListener() {
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 updateMovies();
             }
@@ -52,10 +50,11 @@ public class MainActivityFragment extends Fragment {
 
         prefs.registerOnSharedPreferenceChangeListener(listener);
 
+
         if(savedInstanceState != null && savedInstanceState.containsKey("movies")) {
              movieItems = savedInstanceState.getParcelableArrayList("movies");
         }else{
-            movieItems = new ArrayList<MovieItem>();
+            //movieItems = new ArrayList<MovieItem>();
             updateMovies();
         }
         //to listen to setting changes and fetch new data when changed
@@ -63,18 +62,13 @@ public class MainActivityFragment extends Fragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        //updateMovies();
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.registerOnSharedPreferenceChangeListener(listener);
+        prefs.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     public MainActivityFragment() {
@@ -90,13 +84,12 @@ public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     void updateMovies(){
-
         //strings: vote_average.desc, popularity.desc
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sort_by = sharedPref.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_default));
        // Log.v(LOG_TAG,"sort by: "+ sort_by);
-        if(isOnline() == false){
+        if(OnlineUtils.isOnline(getActivity()) == false){
             Toast.makeText(getActivity(), "no internet connection",
                     Toast.LENGTH_SHORT).show();
         }else {
@@ -162,9 +155,7 @@ public class MainActivityFragment extends Fragment {
             final String MOVIE_OVERVIEW = "overview";
             final String MOVIE_RELEASE_DATE = "release_date";
             final String MOVIE_VOTE = "vote_average";
-          /*  final String OWM_MAX = "max";
-            final String OWM_MIN = "min";
-            final String OWM_DESCRIPTION = "main";*/
+
 
             JSONObject movieJson = new JSONObject(moviesJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(MOVIE_LIST);
@@ -302,21 +293,6 @@ public class MainActivityFragment extends Fragment {
                 super.onPostExecute(movieList);
             }
         }
-
-
-
-
     }
-
-
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnected();
-    }
-
-
-
 
 }

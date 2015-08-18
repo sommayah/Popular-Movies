@@ -44,7 +44,7 @@ public class MovieItem implements Parcelable{
         dest.writeString(overView);
 
     }
-    public final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
+    public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
         @Override
         public MovieItem createFromParcel(Parcel parcel) {
             return new MovieItem(parcel);
